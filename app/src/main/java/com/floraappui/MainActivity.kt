@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.floraappui.navigation.Navigation
 import com.floraappui.ui.theme.FloraAppUITheme
 
 class MainActivity : ComponentActivity() {
@@ -17,24 +18,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             FloraAppUITheme {
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    Greeting("Android")
-                }
+                InitApplicationContent()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    FloraAppUITheme {
-        Greeting("Android")
+fun InitApplicationContent() {
+    // A surface container using the 'background' color from the theme
+    Surface(modifier = Modifier.fillMaxSize()) {
+        Navigation()
     }
 }
