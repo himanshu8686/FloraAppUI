@@ -4,6 +4,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.ZeroCornerSize
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -11,16 +12,20 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -34,8 +39,19 @@ import com.floraappui.R
 import com.floraappui.ScreenRoutes
 import com.floraappui.ui.theme.*
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginScreen(navController: NavController) {
+    var password by remember { mutableStateOf("") }
+    var useremail by remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    val emailFocusRequester = remember {
+        FocusRequester()
+    }
+    val passwordFocusRequester = remember {
+        FocusRequester()
+    }
 
     Box(
         modifier = Modifier
@@ -129,10 +145,9 @@ fun LoginScreen(navController: NavController) {
                         )
                     )
 
-                    var useremail by remember { mutableStateOf("") }
-
                     TextField(
                         value = useremail,
+                        singleLine = true,
                         leadingIcon = {
                             Row(
                                 modifier = Modifier.wrapContentWidth(),
@@ -164,8 +179,20 @@ fun LoginScreen(navController: NavController) {
                             unfocusedIndicatorColor = Color.Transparent,
                             disabledIndicatorColor = Color.Transparent
                         ),
-                        modifier = Modifier.fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(emailFocusRequester),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
+                        keyboardActions = KeyboardActions(
+                            onNext = {
+                                if (password.isNullOrEmpty()) {
+                                    passwordFocusRequester.requestFocus()
+                                    return@KeyboardActions
+                                }
+
+                                keyboardController?.hide()
+                            }
+                        ),
                         label = { Text(text = "Email address") },
                         shape = RoundedCornerShape(8.dp),
                         onValueChange = {
@@ -183,10 +210,9 @@ fun LoginScreen(navController: NavController) {
                         )
                     )
 
-                    var password by remember { mutableStateOf("") }
-
                     TextField(
                         value = password,
+                        singleLine = true,
                         leadingIcon = {
                             Row(
                                 modifier = Modifier.wrapContentWidth(),
@@ -219,9 +245,16 @@ fun LoginScreen(navController: NavController) {
                             disabledIndicatorColor = Color.Transparent
                         ),
                         modifier = Modifier
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .focusRequester(passwordFocusRequester),
                         visualTransformation = PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                                keyboardController?.hide()
+                            }
+                        ),
                         label = { Text(text = "Password") },
                         shape = RoundedCornerShape(8.dp),
                         onValueChange = {
@@ -247,8 +280,8 @@ fun LoginScreen(navController: NavController) {
 
                     Button(
                         onClick = {
-                           /* navController.popBackStack()
-                            navController.navigate(ScreenRoutes.HomeScreen.route)*/
+                            navController.popBackStack()
+                            navController.navigate(ScreenRoutes.HomeScreen.route)
                         },
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = ColorPrimary
@@ -309,7 +342,9 @@ fun Header() {
             modifier = Modifier.fillMaxSize()
         )
         Column(
-            modifier = Modifier.fillMaxSize().padding(bottom = 40.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 40.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -410,7 +445,6 @@ fun PreviewLoginScreen() {
                             fontSize = 18.sp,
                             textAlign = TextAlign.Center
                         )
-
                     }
 
 
@@ -545,8 +579,7 @@ fun PreviewLoginScreen() {
 
                     Button(
                         onClick = {
-                            /*navController.popBackStack()
-                            navController.navigate(Screen.HomeScreen.route)*/
+
                         },
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = ColorPrimary
@@ -562,7 +595,6 @@ fun PreviewLoginScreen() {
                             style = MaterialTheme.typography.button,
                             modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
                         )
-
                     }
 
                     Row(
@@ -583,15 +615,10 @@ fun PreviewLoginScreen() {
                             modifier = Modifier.clickable {
 
                             }
-
                         )
                     }
-
-
                 }
-
             }
-
         }
     }
 }
