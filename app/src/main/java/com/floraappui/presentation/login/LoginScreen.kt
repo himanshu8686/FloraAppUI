@@ -2,7 +2,6 @@ package com.floraappui.presentation.login
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -22,6 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -29,6 +29,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,9 +38,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.floraappui.R
 import com.floraappui.ScreenRoutes
-import com.floraappui.ui.theme.*
+import com.floraappui.ui.theme.AppTheme
+import com.floraappui.ui.theme.Light_Grey
+import com.floraappui.ui.theme.floraSansFamily
 
-@OptIn(ExperimentalComposeUiApi::class)
+@ExperimentalComposeUiApi
 @Composable
 fun LoginScreen(navController: NavController) {
     var password by remember { mutableStateOf("") }
@@ -56,7 +59,6 @@ fun LoginScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Ghost_White)
             .verticalScroll(rememberScrollState())
     ) {
         ConstraintLayout {
@@ -76,8 +78,7 @@ fun LoginScreen(navController: NavController) {
             }
 
             Surface(
-                color = Ghost_White,
-                shape = RoundedCornerShape(40.dp).copy(
+                shape = AppTheme.shapes.large.copy(
                     bottomStart = ZeroCornerSize,
                     bottomEnd = ZeroCornerSize
                 ),
@@ -105,26 +106,25 @@ fun LoginScreen(navController: NavController) {
                             text = buildAnnotatedString {
                                 withStyle(
                                     style = SpanStyle(
-                                        ColorPrimary,
+                                        color = AppTheme.colors.primary,
                                         fontFamily = floraSansFamily,
                                         fontWeight = FontWeight.Bold
                                     )
                                 ) {
-                                    append("Log in ")
+                                    append(stringResource(R.string.log_in) + " ")
                                 }
 
                                 withStyle(
                                     style = SpanStyle(
-                                        Dark_Grey,
                                         fontFamily = floraSansFamily,
                                         fontWeight = FontWeight.Normal
                                     )
                                 ) {
-                                    append("to your account.")
+                                    append(stringResource(R.string.to_your_account))
                                 }
 
                             },
-                            style = MaterialTheme.typography.subtitle1,
+                            style = AppTheme.typography.subtitle1,
                             modifier = Modifier,
                             fontSize = 18.sp,
                             textAlign = TextAlign.Center
@@ -136,9 +136,8 @@ fun LoginScreen(navController: NavController) {
                     Spacer(modifier = Modifier.padding(10.dp))
 
                     Text(
-                        text = "Email Address",
-                        style = MaterialTheme.typography.subtitle1,
-                        color = Dark_Grey,
+                        text = stringResource(R.string.email_address),
+                        style = AppTheme.typography.subtitle1,
                         modifier = Modifier.padding(
                             top = 10.dp,
                             bottom = 20.dp
@@ -156,7 +155,7 @@ fun LoginScreen(navController: NavController) {
                                     Icon(
                                         imageVector = Icons.Default.Email,
                                         contentDescription = null,
-                                        tint = ColorPrimary
+                                        tint = AppTheme.colors.primary
                                     )
                                     Canvas(
                                         modifier = Modifier
@@ -174,7 +173,7 @@ fun LoginScreen(navController: NavController) {
                             )
                         },
                         colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = White,
+                            backgroundColor = AppTheme.colors.onPrimary,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
                             disabledIndicatorColor = Color.Transparent
@@ -185,7 +184,7 @@ fun LoginScreen(navController: NavController) {
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions(
                             onNext = {
-                                if (password.isNullOrEmpty()) {
+                                if (password.isEmpty()) {
                                     passwordFocusRequester.requestFocus()
                                     return@KeyboardActions
                                 }
@@ -193,17 +192,16 @@ fun LoginScreen(navController: NavController) {
                                 keyboardController?.hide()
                             }
                         ),
-                        label = { Text(text = "Email address") },
-                        shape = RoundedCornerShape(8.dp),
+                        label = { Text(text = stringResource(id = R.string.email_address)) },
+                        shape = AppTheme.shapes.small,
                         onValueChange = {
                             useremail = it
                         }
                     )
 
                     Text(
-                        text = "Password",
-                        style = MaterialTheme.typography.subtitle1,
-                        color = Dark_Grey,
+                        text = stringResource(R.string.password),
+                        style = AppTheme.typography.subtitle1,
                         modifier = Modifier.padding(
                             top = 10.dp,
                             bottom = 20.dp
@@ -221,7 +219,7 @@ fun LoginScreen(navController: NavController) {
                                     Icon(
                                         imageVector = Icons.Default.Lock,
                                         contentDescription = null,
-                                        tint = ColorPrimary
+                                        tint = AppTheme.colors.primary
                                     )
                                     Canvas(
                                         modifier = Modifier
@@ -239,7 +237,7 @@ fun LoginScreen(navController: NavController) {
                             )
                         },
                         colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = White,
+                            backgroundColor = AppTheme.colors.onPrimary,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
                             disabledIndicatorColor = Color.Transparent
@@ -255,8 +253,8 @@ fun LoginScreen(navController: NavController) {
                                 keyboardController?.hide()
                             }
                         ),
-                        label = { Text(text = "Password") },
-                        shape = RoundedCornerShape(8.dp),
+                        label = { Text(text = stringResource(id = R.string.password)) },
+                        shape = AppTheme.shapes.small,
                         onValueChange = {
                             password = it
                         }
@@ -268,9 +266,8 @@ fun LoginScreen(navController: NavController) {
                         horizontalArrangement = Arrangement.End
                     ) {
                         Text(
-                            text = "Forgot Password ?",
-                            style = MaterialTheme.typography.subtitle2,
-                            color = ColorPrimary,
+                            text = stringResource(R.string.forgot_password),
+                            style = AppTheme.typography.subtitle2,
                             textAlign = TextAlign.End,
                             modifier = Modifier
                                 .padding(top = 10.dp)
@@ -284,7 +281,7 @@ fun LoginScreen(navController: NavController) {
                             navController.navigate(ScreenRoutes.HomeScreen.route)
                         },
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = ColorPrimary
+                            backgroundColor = AppTheme.colors.primary
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -292,9 +289,8 @@ fun LoginScreen(navController: NavController) {
                             .align(Alignment.CenterHorizontally)
                     ) {
                         Text(
-                            text = "Login",
-                            color = White,
-                            style = MaterialTheme.typography.button,
+                            text = stringResource(id = R.string.log_in),
+                            style = AppTheme.typography.button,
                             modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
                         )
 
@@ -306,14 +302,18 @@ fun LoginScreen(navController: NavController) {
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(text = buildAnnotatedString {
-                            append("Don't have an account? Signup")
+                            append(stringResource(R.string.dont_have_an_account_signup))
                             addStyle(
-                                SpanStyle(color = ColorPrimary),
+                                SpanStyle(
+                                    fontFamily = floraSansFamily,
+                                    fontWeight = FontWeight.Bold,
+                                    textDecoration = TextDecoration.Underline
+                                ),
                                 23,
                                 this.length
                             )
                         },
-                            style = MaterialTheme.typography.subtitle1,
+                            fontFamily = floraSansFamily,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.clickable {
 
@@ -321,7 +321,6 @@ fun LoginScreen(navController: NavController) {
 
                         )
                     }
-
 
                 }
 
@@ -356,269 +355,11 @@ fun Header() {
 
             Text(
                 text = "FloraApp",
-                color = White,
+                color = AppTheme.colors.onPrimary,
                 fontSize = 40.sp,
                 fontWeight = FontWeight.SemiBold,
                 letterSpacing = 2.sp
             )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewLoginScreen() {
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Ghost_White)
-            .verticalScroll(rememberScrollState())
-    ) {
-        ConstraintLayout {
-
-            val (logoimageref, loginformref) = createRefs()
-
-            Box(contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .height(280.dp)
-                    .constrainAs(logoimageref) {
-                        top.linkTo(loginformref.top)
-                        bottom.linkTo(loginformref.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }) {
-                Header()
-            }
-
-            Surface(
-                color = Ghost_White,
-                shape = RoundedCornerShape(40.dp).copy(
-                    bottomStart = ZeroCornerSize,
-                    bottomEnd = ZeroCornerSize
-                ),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 100.dp)
-                    .constrainAs(loginformref) {
-                        bottom.linkTo(parent.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(30.dp)
-                ) {
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = buildAnnotatedString {
-                                withStyle(
-                                    style = SpanStyle(
-                                        ColorPrimary,
-                                        fontFamily = floraSansFamily,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                ) {
-                                    append("Log in ")
-                                }
-
-                                withStyle(
-                                    style = SpanStyle(
-                                        Dark_Grey,
-                                        fontFamily = floraSansFamily,
-                                        fontWeight = FontWeight.Normal
-                                    )
-                                ) {
-                                    append("to your account.")
-                                }
-
-                            },
-                            style = MaterialTheme.typography.subtitle1,
-                            modifier = Modifier,
-                            fontSize = 18.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-
-                    Spacer(modifier = Modifier.padding(10.dp))
-
-                    Text(
-                        text = "Email Address",
-                        style = MaterialTheme.typography.subtitle1,
-                        color = Dark_Grey,
-                        modifier = Modifier.padding(
-                            top = 10.dp,
-                            bottom = 20.dp
-                        )
-                    )
-
-                    var useremail by remember { mutableStateOf("") }
-
-                    TextField(
-                        value = useremail,
-                        leadingIcon = {
-                            Row(
-                                modifier = Modifier.wrapContentWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                content = {
-                                    Icon(
-                                        imageVector = Icons.Default.Email,
-                                        contentDescription = null,
-                                        tint = ColorPrimary
-                                    )
-                                    Canvas(
-                                        modifier = Modifier
-                                            .height(24.dp)
-                                            .padding(start = 10.dp)
-                                    ) {
-                                        drawLine(
-                                            color = Light_Grey,
-                                            start = Offset(0f, 0f),
-                                            end = Offset(0f, size.height),
-                                            strokeWidth = 2.0F
-                                        )
-                                    }
-                                }
-                            )
-                        },
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = White,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        label = { Text(text = "Email address") },
-                        shape = RoundedCornerShape(8.dp),
-                        onValueChange = {
-                            useremail = it
-                        }
-                    )
-
-                    Text(
-                        text = "Password",
-                        style = MaterialTheme.typography.subtitle1,
-                        color = Dark_Grey,
-                        modifier = Modifier.padding(
-                            top = 10.dp,
-                            bottom = 20.dp
-                        )
-                    )
-
-                    var password by remember { mutableStateOf("") }
-
-                    TextField(
-                        value = password,
-                        leadingIcon = {
-                            Row(
-                                modifier = Modifier.wrapContentWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                content = {
-                                    Icon(
-                                        imageVector = Icons.Default.Lock,
-                                        contentDescription = null,
-                                        tint = ColorPrimary
-                                    )
-                                    Canvas(
-                                        modifier = Modifier
-                                            .height(24.dp)
-                                            .padding(start = 10.dp)
-                                    ) {
-                                        drawLine(
-                                            color = Light_Grey,
-                                            start = Offset(0f, 0f),
-                                            end = Offset(0f, size.height),
-                                            strokeWidth = 2.0F
-                                        )
-                                    }
-                                }
-                            )
-                        },
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = White,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        visualTransformation = PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        label = { Text(text = "Password") },
-                        shape = RoundedCornerShape(8.dp),
-                        onValueChange = {
-                            password = it
-                        }
-                    )
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        Text(
-                            text = "Forgot Password ?",
-                            style = MaterialTheme.typography.subtitle2,
-                            color = ColorPrimary,
-                            textAlign = TextAlign.End,
-                            modifier = Modifier
-                                .padding(top = 10.dp)
-                                .clickable { }
-                        )
-                    }
-
-                    Button(
-                        onClick = {
-
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = ColorPrimary
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 30.dp, bottom = 34.dp)
-                            .align(Alignment.CenterHorizontally)
-                    ) {
-                        Text(
-                            text = "Login",
-                            color = White,
-                            style = MaterialTheme.typography.button,
-                            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
-                        )
-                    }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(text = buildAnnotatedString {
-                            append("Don't have an account? Signup")
-                            addStyle(
-                                SpanStyle(color = ColorPrimary),
-                                23,
-                                this.length
-                            )
-                        },
-                            style = MaterialTheme.typography.subtitle1,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.clickable {
-
-                            }
-                        )
-                    }
-                }
-            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.floraappui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,6 +11,7 @@ import com.floraappui.presentation.home.HomeScreen
 import com.floraappui.presentation.login.LoginScreen
 import com.floraappui.presentation.splash.SplashScreen
 
+@ExperimentalComposeUiApi
 @Composable
 fun Navigation() {
     val navController: NavHostController = rememberNavController()
